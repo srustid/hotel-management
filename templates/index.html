@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Registration - CRUD</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; background: #f4f6f8; color: #222; }
+        h1 { text-align: center; color: #2c3e50; }
+        form { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input[type=text], input[type=number] { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { margin-top: 15px; padding: 10px 18px; background: #2c3e50; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #1a252f; }
+        table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background: #2c3e50; color: #fff; }
+        .actions a, .actions button { margin-right: 5px; font-size: 13px; padding: 5px 10px; }
+        .edit-btn { background: #2980b9; color: #fff; text-decoration: none; padding: 5px 10px; border-radius: 4px; }
+        .delete-btn { background: #c0392b; }
+        .flash { padding: 10px; border-radius: 4px; margin-bottom: 15px; }
+        .flash.success { background: #d4edda; color: #155724; }
+        .flash.error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+    <h1>Hotel Registration</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('edit_hotel', hotel_id=edit_hotel.id) if edit_hotel else url_for('add_hotel') }}" method="POST">
+        <label>Hotel Name</label>
+        <input type="text" name="name" value="{{ edit_hotel.name if edit_hotel else '' }}" required>
+
+        <label>Address</label>
+        <input type="text" name="address" value="{{ edit_hotel.address if edit_hotel else '' }}" required>
+
+        <label>City</label>
+        <input type="text" name="city" value="{{ edit_hotel.city if edit_hotel else '' }}" required>
+
+        <label>Number of Rooms</label>
+        <input type="number" name="rooms" value="{{ edit_hotel.rooms if edit_hotel else 0 }}" min="0" required>
+
+        <label>Contact Number</label>
+        <input type="text" name="contact" value="{{ edit_hotel.contact if edit_hotel else '' }}" required>
+
+        <button type="submit">{{ 'Update Hotel' if edit_hotel else 'Register Hotel' }}</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Rooms</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hotel in hotels %}
+            <tr>
+                <td>{{ hotel.id }}</td>
+                <td>{{ hotel.name }}</td>
+                <td>{{ hotel.address }}</td>
+                <td>{{ hotel.city }}</td>
+                <td>{{ hotel.rooms }}</td>
+                <td>{{ hotel.contact }}</td>
+                <td class="actions">
+                    <a class="edit-btn" href="{{ url_for('edit_hotel', hotel_id=hotel.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_hotel', hotel_id=hotel.id) }}" method="POST" style="display:inline;">
+                        <button class="delete-btn" type="submit" onclick="return confirm('Delete this hotel?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" style="text-align:center;">No hotels registered yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
