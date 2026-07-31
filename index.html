@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ananya Sharma — Full Stack Developer</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#11161d;
+    --slate:#1c2531;
+    --slate-2:#26313f;
+    --paper:#f6f4ef;
+    --paper-dim:#e9e6dd;
+    --signal:#3eb8a1;
+    --gold:#d9a441;
+    --text-soft:#93a0ad;
+    --text-body:#3a4149;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    background:var(--paper);
+    color:var(--text-body);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,h4,.display-font{
+    font-family:'Space Grotesk', sans-serif;
+  }
+
+  .mono{ font-family:'JetBrains Mono', monospace; }
+
+  a{ text-decoration:none; }
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--signal); outline-offset:2px; }
+
+  /* ---------- TAB BAR NAV ---------- */
+  .tab-bar{
+    background:var(--ink);
+    border-bottom:1px solid #2a3441;
+    position:sticky;
+    top:0;
+    z-index:50;
+  }
+  .tab-bar .dots span{
+    display:inline-block; width:10px; height:10px; border-radius:50%;
+    margin-right:6px;
+  }
+  .dot-red{background:#e5645a;}
+  .dot-yellow{background:#e6b450;}
+  .dot-green{background:#3eb8a1;}
+
+  .file-tab{
+    color:var(--text-soft);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.85rem;
+    padding:0.65rem 1.1rem;
+    border-right:1px solid #2a3441;
+    background:transparent;
+    transition:background .15s ease, color .15s ease;
+    white-space:nowrap;
+  }
+  .file-tab.active{
+    background:var(--slate);
+    color:var(--paper);
+    border-top:2px solid var(--signal);
+  }
+  .file-tab:hover{ background:var(--slate-2); color:var(--paper); }
+  .file-tab .ext{ color:var(--gold); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--ink);
+    color:var(--paper);
+    padding:5rem 0 5.5rem;
+  }
+  .code-window{
+    background:var(--slate);
+    border:1px solid #2a3441;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);
+  }
+  .code-window .titlebar{
+    background:#161d27;
+    padding:0.6rem 1rem;
+    display:flex;
+    align-items:center;
+    gap:0.4rem;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    color:var(--text-soft);
+  }
+  .code-body{
+    padding:1.6rem 1.8rem 1.9rem;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.92rem;
+    line-height:1.85;
+  }
+  .code-body .ln{ color:#4b5a68; user-select:none; margin-right:1rem; }
+  .code-body .kw{ color:#c586c0; }
+  .code-body .fn{ color:var(--signal); }
+  .code-body .str{ color:var(--gold); }
+  .code-body .com{ color:#6b7785; font-style:italic; }
+  .code-body .prop{ color:#7cc7ff; }
+
+  .cursor-blink{
+    display:inline-block; width:8px; height:1.1em; background:var(--signal);
+    animation:blink 1s steps(1) infinite; vertical-align:middle; margin-left:2px;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .badge-role{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.04em;
+    background:rgba(62,184,161,0.12);
+    color:var(--signal);
+    border:1px solid rgba(62,184,161,0.35);
+    padding:0.35rem 0.7rem;
+    border-radius:5px;
+  }
+
+  /* ---------- SECTION LABELS ---------- */
+  .section-eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    color:var(--signal);
+    letter-spacing:0.05em;
+  }
+  .section-eyebrow::before{ content:"// "; color:var(--gold); }
+
+  section{ padding:4.5rem 0; }
+  .section-alt{ background:var(--paper-dim); }
+
+  /* ---------- ABOUT ---------- */
+  .stat-card{
+    background:#fff;
+    border:1px solid #e3ddce;
+    border-radius:10px;
+    padding:1.2rem;
+    height:100%;
+  }
+  .stat-num{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.9rem;
+    color:var(--ink);
+  }
+
+  /* ---------- PROJECT CARDS ---------- */
+  .project-card{
+    background:#fff;
+    border:1px solid #e3ddce;
+    border-radius:10px;
+    overflow:hidden;
+    height:100%;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .project-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 16px 40px -16px rgba(17,22,29,0.25);
+  }
+  .project-file-header{
+    background:var(--ink);
+    color:var(--text-soft);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    padding:0.55rem 1rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .project-file-header .path-name{ color:var(--paper); }
+  .project-body{ padding:1.5rem; }
+  .tech-pill{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    background:var(--paper-dim);
+    border:1px solid #ddd6c4;
+    color:var(--text-body);
+    padding:0.22rem 0.55rem;
+    border-radius:4px;
+    margin:0 0.3rem 0.3rem 0;
+  }
+  .repo-link{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.85rem;
+    color:var(--ink);
+    font-weight:600;
+    border-bottom:1px solid var(--signal);
+    padding-bottom:1px;
+  }
+  .repo-link:hover{ color:var(--signal); }
+
+  /* ---------- TECH STACK ---------- */
+  .stack-group{
+    background:#fff;
+    border:1px solid #e3ddce;
+    border-radius:10px;
+    padding:1.4rem 1.5rem;
+    height:100%;
+  }
+  .stack-group h6{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--gold);
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin-bottom:0.9rem;
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact-card{
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:12px;
+    padding:3rem;
+  }
+  .contact-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0.9rem 0;
+    border-bottom:1px solid #2a3441;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.92rem;
+  }
+  .contact-row:last-child{ border-bottom:none; }
+  .contact-row .label{ color:var(--text-soft); }
+  .contact-row a{ color:var(--paper); font-weight:500; }
+  .contact-row a:hover{ color:var(--signal); }
+
+  /* ---------- STATUS BAR FOOTER ---------- */
+  .status-bar{
+    background:var(--ink);
+    color:var(--text-soft);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    padding:0.55rem 0;
+    border-top:1px solid #2a3441;
+  }
+  .status-bar .chip{
+    background:var(--slate);
+    padding:0.15rem 0.6rem;
+    border-radius:3px;
+    margin-right:0.6rem;
+  }
+  .status-bar .chip.git{ background:rgba(62,184,161,0.15); color:var(--signal); }
+
+  @media (max-width: 767px){
+    .code-body{ font-size:0.8rem; }
+    .contact-card{ padding:1.6rem; }
+    .contact-row{ flex-direction:column; align-items:flex-start; gap:0.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= TAB BAR NAV ================= -->
+<nav class="tab-bar">
+  <div class="d-flex align-items-center overflow-auto">
+    <div class="dots px-3">
+      <span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span>
+    </div>
+    <a href="#about" class="file-tab active">about<span class="ext">.tsx</span></a>
+    <a href="#projects" class="file-tab">projects<span class="ext">.tsx</span></a>
+    <a href="#stack" class="file-tab">stack<span class="ext">.json</span></a>
+    <a href="#contact" class="file-tab">contact<span class="ext">.md</span></a>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="about">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6">
+        <span class="badge-role mono mb-3 d-inline-block">FINAL YEAR BCA · GRADUATING 2027</span>
+        <h1 class="display-4 fw-bold mt-3 mb-3">Ananya Sharma</h1>
+        <p class="fs-5" style="color:var(--text-soft); max-width:480px;">
+          Full stack developer in training — building complete web applications from
+          database schema to deployed UI, one project at a time.
+        </p>
+        <div class="d-flex gap-3 mt-4 flex-wrap">
+          <a href="#projects" class="btn btn-lg px-4" style="background:var(--signal); color:var(--ink); font-weight:600;">View projects</a>
+          <a href="#contact" class="btn btn-outline-light btn-lg px-4">Get in touch</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="code-window">
+          <div class="titlebar">
+            <span class="dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></span>
+            <span class="ms-2">developer.js</span>
+          </div>
+          <div class="code-body">
+            <div><span class="ln">1</span><span class="kw">const</span> <span class="prop">developer</span> = {</div>
+            <div><span class="ln">2</span>&nbsp;&nbsp;name: <span class="str">"Ananya Sharma"</span>,</div>
+            <div><span class="ln">3</span>&nbsp;&nbsp;education: <span class="str">"BCA, Class of 2027"</span>,</div>
+            <div><span class="ln">4</span>&nbsp;&nbsp;role: <span class="str">"Full Stack Developer"</span>,</div>
+            <div><span class="ln">5</span>&nbsp;&nbsp;stack: [<span class="str">"React"</span>, <span class="str">"Node"</span>, <span class="str">"Flask"</span>, <span class="str">"SQL"</span>],</div>
+            <div><span class="ln">6</span>&nbsp;&nbsp;<span class="fn">isHiring</span>: <span class="kw">true</span>,</div>
+            <div><span class="ln">7</span>}<span class="cursor-blink"></span></div>
+            <div class="mt-2"><span class="ln">8</span><span class="com">// open to internships & entry-level roles</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= ABOUT / STATS ================= -->
+<section>
+  <div class="container">
+    <div class="section-eyebrow mb-2">who_am_i</div>
+    <h2 class="fw-bold mb-4">About</h2>
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <p class="fs-6" style="max-width:600px;">
+          I'm a final year BCA student graduating in 2027, focused on full stack web development.
+          Over the course of my degree I've moved from classroom fundamentals to shipping complete
+          applications — designing schemas, building REST APIs, and wiring them into responsive
+          front ends. I like projects that force me to touch the whole stack, not just one layer.
+        </p>
+        <p class="fs-6" style="max-width:600px;">
+          Currently looking for internship and entry-level full stack developer opportunities
+          where I can keep building production-grade software alongside an experienced team.
+        </p>
+      </div>
+      <div class="col-lg-5">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="stat-card">
+              <div class="stat-num">4</div>
+              <div class="mono" style="font-size:0.8rem; color:var(--text-soft);">shipped projects</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="stat-card">
+              <div class="stat-num">2027</div>
+              <div class="mono" style="font-size:0.8rem; color:var(--text-soft);">graduation year</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="stat-card">
+              <div class="stat-num">6+</div>
+              <div class="mono" style="font-size:0.8rem; color:var(--text-soft);">languages &amp; frameworks</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="stat-card">
+              <div class="stat-num">BCA</div>
+              <div class="mono" style="font-size:0.8rem; color:var(--text-soft);">final year</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section class="section-alt" id="projects">
+  <div class="container">
+    <div class="section-eyebrow mb-2">selected_work</div>
+    <h2 class="fw-bold mb-4">Projects</h2>
+    <div class="row g-4">
+
+      <!-- Project 1 -->
+      <div class="col-md-6">
+        <div class="project-card">
+          <div class="project-file-header">
+            <span><span class="path-name">HealthTrack</span>/patient-system.md</span>
+            <span>01</span>
+          </div>
+          <div class="project-body">
+            <h4 class="fw-semibold mb-2">HealthTrack — Patient Management System</h4>
+            <p style="font-size:0.92rem;">
+              A full stack web app for clinics to register patients, schedule appointments,
+              and maintain visit history. Includes role-based login for admins and staff,
+              and a dashboard summarizing daily appointments.
+            </p>
+            <div class="mb-3">
+              <span class="tech-pill">React</span>
+              <span class="tech-pill">Node.js</span>
+              <span class="tech-pill">Express</span>
+              <span class="tech-pill">MongoDB</span>
+            </div>
+            <a href="https://github.com/ananyasharma/healthtrack" target="_blank" rel="noopener" class="repo-link">github.com/ananyasharma/healthtrack →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="col-md-6">
+        <div class="project-card">
+          <div class="project-file-header">
+            <span><span class="path-name">QuickCart</span>/ecommerce.md</span>
+            <span>02</span>
+          </div>
+          <div class="project-body">
+            <h4 class="fw-semibold mb-2">QuickCart — E-Commerce Platform</h4>
+            <p style="font-size:0.92rem;">
+              A Django-based online store with product catalog, cart, order tracking, and an
+              admin panel for inventory management. Styled with Bootstrap for a fully
+              responsive shopping experience.
+            </p>
+            <div class="mb-3">
+              <span class="tech-pill">Django</span>
+              <span class="tech-pill">Python</span>
+              <span class="tech-pill">PostgreSQL</span>
+              <span class="tech-pill">Bootstrap</span>
+            </div>
+            <a href="https://github.com/ananyasharma/quickcart" target="_blank" rel="noopener" class="repo-link">github.com/ananyasharma/quickcart →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="col-md-6">
+        <div class="project-card">
+          <div class="project-file-header">
+            <span><span class="path-name">CampusConnect</span>/college-portal.md</span>
+            <span>03</span>
+          </div>
+          <div class="project-body">
+            <h4 class="fw-semibold mb-2">CampusConnect — Event &amp; Club Portal</h4>
+            <p style="font-size:0.92rem;">
+              A Flask web app for managing college club registrations and event sign-ups.
+              Students can browse events, RSVP, and receive automated confirmation emails;
+              faculty can publish and track attendance.
+            </p>
+            <div class="mb-3">
+              <span class="tech-pill">Flask</span>
+              <span class="tech-pill">SQLite</span>
+              <span class="tech-pill">JavaScript</span>
+              <span class="tech-pill">Jinja2</span>
+            </div>
+            <a href="https://github.com/ananyasharma/campusconnect" target="_blank" rel="noopener" class="repo-link">github.com/ananyasharma/campusconnect →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 4 -->
+      <div class="col-md-6">
+        <div class="project-card">
+          <div class="project-file-header">
+            <span><span class="path-name">TaskFlow</span>/kanban-app.md</span>
+            <span>04</span>
+          </div>
+          <div class="project-body">
+            <h4 class="fw-semibold mb-2">TaskFlow — Kanban Task Manager</h4>
+            <p style="font-size:0.92rem;">
+              A drag-and-drop task board built on the MERN stack, letting users create boards,
+              move tasks across custom columns, and track progress in real time with
+              persistent state stored per user.
+            </p>
+            <div class="mb-3">
+              <span class="tech-pill">MongoDB</span>
+              <span class="tech-pill">Express</span>
+              <span class="tech-pill">React</span>
+              <span class="tech-pill">Node.js</span>
+            </div>
+            <a href="https://github.com/ananyasharma/taskflow" target="_blank" rel="noopener" class="repo-link">github.com/ananyasharma/taskflow →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= TECH STACK ================= -->
+<section id="stack">
+  <div class="container">
+    <div class="section-eyebrow mb-2">tech_stack</div>
+    <h2 class="fw-bold mb-4">Stack</h2>
+    <div class="row g-3">
+      <div class="col-md-3 col-6">
+        <div class="stack-group">
+          <h6>Languages</h6>
+          <span class="tech-pill">Java</span>
+          <span class="tech-pill">Python</span>
+          <span class="tech-pill">JavaScript</span>
+          <span class="tech-pill">C</span>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stack-group">
+          <h6>Frontend</h6>
+          <span class="tech-pill">HTML5</span>
+          <span class="tech-pill">CSS3</span>
+          <span class="tech-pill">Bootstrap</span>
+          <span class="tech-pill">React</span>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stack-group">
+          <h6>Backend</h6>
+          <span class="tech-pill">Node.js</span>
+          <span class="tech-pill">Express</span>
+          <span class="tech-pill">Flask</span>
+          <span class="tech-pill">Django</span>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stack-group">
+          <h6>Database &amp; Tools</h6>
+          <span class="tech-pill">MySQL</span>
+          <span class="tech-pill">MongoDB</span>
+          <span class="tech-pill">Git</span>
+          <span class="tech-pill">Postman</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="section-alt" id="contact">
+  <div class="container">
+    <div class="section-eyebrow mb-2">get_in_touch</div>
+    <h2 class="fw-bold mb-4">Contact</h2>
+    <div class="contact-card">
+      <div class="contact-row">
+        <span class="label">email</span>
+        <a href="mailto:ananya.sharma.dev@gmail.com">ananya.sharma.dev@gmail.com</a>
+      </div>
+      <div class="contact-row">
+        <span class="label">phone</span>
+        <a href="tel:+919876543210">+91 98765 43210</a>
+      </div>
+      <div class="contact-row">
+        <span class="label">linkedin</span>
+        <a href="https://linkedin.com/in/ananyasharma-dev" target="_blank" rel="noopener">linkedin.com/in/ananyasharma-dev</a>
+      </div>
+      <div class="contact-row">
+        <span class="label">github</span>
+        <a href="https://github.com/ananyasharma" target="_blank" rel="noopener">github.com/ananyasharma</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATUS BAR FOOTER ================= -->
+<footer class="status-bar">
+  <div class="container d-flex flex-wrap justify-content-between align-items-center">
+    <div>
+      <span class="chip git">⎇ main</span>
+      <span class="chip">BCA · 2027</span>
+      <span class="chip">open-to-work: true</span>
+    </div>
+    <div>© 2026 Ananya Sharma — built with Bootstrap</div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
